@@ -25,15 +25,15 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">Test App</a>
+				<a class="navbar-brand" href="/">Test App</a>
 			</div>
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li><a href="#">Dashboard</a></li>
-					<li><a href="#">Profile</a></li>
+					<li><a href="/dashboard/admin">Dashboard</a></li>
+					<li><a href="/users/edit">Profile</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#">Log off</a></li>
+					<li><a href="/logoff">Log off</a></li>
 				</ul>
 			</div>
 		</div>
@@ -44,12 +44,12 @@
 				<h1>Add a new user</h1>
 			</div>
 			<div class="col-md-6">
-				<p class="text-right"><a href="#" class="btn btn-primary">Return to Dashboard</a></p>
+				<p class="text-right"><a href="/dashboard/admin" class="btn btn-primary">Return to Dashboard</a></p>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-6">
-				<form>
+				<form action="/users/create" method="POST">
 					<div class="form-group">
 						<label for="email">Email Address</label>
 						<input type="email" class="form-control" id="email" name="email">
@@ -70,7 +70,7 @@
 						<label for="pwconfirm">Password Confirmation</label>
 						<input type="password" id="pwconfirm" class="form-control" name="pwconfirm">
 					</div>
-					<p class="text-right"><input type="submit" class="btn btn-success" value="Sign in"></p>
+					<p class="text-right"><input type="submit" class="btn btn-success" value="Create User"></p>
 				</form>
 			</div>
 			<div class="col-md-6">

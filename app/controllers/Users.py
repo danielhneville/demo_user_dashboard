@@ -24,3 +24,15 @@ class Users(Controller):
 
 	def logoff(self):
 		return redirect('/')
+
+	def login(self):
+		#if user is admin, return them to the admin dashboard instead.
+		return redirect('/dashboard')
+
+	def create(self):
+		#if user is normal user who just registered, return them to the dashboard instead.
+		return redirect('/dashboard/admin')
+
+	def update(self):
+		#grab session data and data from one of the three different forms (based on which was submitted - info, password, description) to update user information through the user model.
+		return redirect('/users/edit')
