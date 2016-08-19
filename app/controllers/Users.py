@@ -1,9 +1,10 @@
 from system.core.controller import *
+import datetime
 
 class Users(Controller):
 	def __init__(self, action):
 		super(Users, self).__init__(action)
-
+		self.load_model('Message')
 		self.load_model('User')
 
 	def signin(self):
@@ -13,20 +14,22 @@ class Users(Controller):
 		return self.load_view('/users/register.html')
 
 	def dashboard(self):
+		if 'user' not in session:
+			return redirect('/')
 		users = self.models['User'].all_users()
-		for user in users:
-			if user['user_level'] == 9:
-				user['user_level'] = 'admin'
-			else:
-				user['user_level'] = 'normal'
-			user['created_at'] = user['created_at'].strftime('%b %d, %Y')
 		return self.load_view('/users/dashboard.html', users=users)
 
 	def edit(self):
+		if 'user' not in session:
+			return redirect('/')
 		return self.load_view('/users/edit.html')
 
 	def show(self, id):
-		return self.load_view('/users/show.html')
+		if 'user' not in session:
+			return redirect('/')
+		user = self.models['User'].one_user(id)
+		content = self.models['Message'].get_content_by_user_id(id)
+		return self.load_view('/users/show.html', user=user, content=content)
 
 	def logoff(self):
 		if 'user' in session:
@@ -38,7 +41,6 @@ class Users(Controller):
 		return redirect('/dashboard')
 
 	def create(self):
-		#if user is normal user who just registered, return them to the dashboard instead.
 		user = self.models['User'].insert_user(request.form)
 		if not user:
 			return redirect('/')

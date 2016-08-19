@@ -41,7 +41,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-				<h1>Sir Perceval</h1>	
+				<h1>{{ user['first_name'] }} {{ user['last_name'] }}</h1>	
 			</div>
 		</div>
 		<div class="row">
@@ -52,15 +52,15 @@
 				<p>Description:</p>
 			</div>
 			<div class="col-xs-9">
-				<p>Some date</p>
-				<p>#1</p>
-				<p>perceval@sir.fur</p>
-				<p>meow meow meow meow</p>
+				<p>{{ user['created_at'] }}</p>
+				<p>#{{ user['id'] }}</p>
+				<p>{{ user['email'] }}</p>
+				<p>{{ user['description'] }}</p>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-12">
-				<h2>Leave a message for Perceval</h2>
+				<h2>Leave a message for {{ user['first_name'] }}</h2>
 				<form action="/messages/create/1" method="POST">
 					<div class="form-group">
 						<textarea name="message" class="form-control" rows="5"></textarea>
@@ -72,41 +72,42 @@
 
 		<div class="spacer" style="height:50px"></div>
 
+		{% for message in content %}
 		<div class="message_comments">
 			<div class="row">
 				<div class="col-xs-6">
-					<p>Charlie Darwin wrote</p>
+					<p>{{ message['poster'] }} wrote</p>
 				</div>
 				<div class="col-xs-6">
-					<p class="text-right"><em>23 hours ago</em></p>
+					<p class="text-right"><em>{{ message['m_created_at'] }}</em></p>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-12">
 					<div class="panel panel-default">
 						<div class="panel-body">
-							I eat your food and surprise attack you! I really just want snuggles though.
+							{{ message['message'] }}
 						</div>
 					</div>
-
+					{% for comment in message['comments'] %}
 					<div class="row">
 						<div class="col-xs-offset-2 col-xs-5">
-							<p>Sir Perceval wrote</p>
+							<p>{{ comment['commenter'] }} wrote</p>
 						</div>
 						<div class="col-xs-5">
-							<p class="text-right"><em>17 hours ago</em></p>
+							<p class="text-right"><em>{{ comment['c_created_at'] }}</em></p>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-xs-offset-2 col-xs-10">
 							<div class="panel panel-default">
 								<div class="panel-body">
-									I'm coming around to you. Still not entirely sure about you.
+									{{ comment['comment'] }}
 								</div>
 							</div>
 						</div>
 					</div>
-
+					{% endfor %}
 					<div class="row">
 						<div class="col-xs-offset-2 col-xs-10">
 							<form action="/messages/comment/1" method="POST">
@@ -120,7 +121,7 @@
 
 				</div>
 			</div>
-
+		{% endfor %}
 	</div>
 </body>
 </html>

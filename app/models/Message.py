@@ -1,11 +1,18 @@
 from system.core.model import Model
 
-class WelcomeModel(Model):
+class Message(Model):
 	def __init__(self):
-		super(WelcomeModel, self).__init__()
+		super(Message, self).__init__()
 
-	
-
+	def get_content_by_user_id(self, id):
+		m_query = 'SELECT messages.id, message, messages.created_at as m_created_at, CONCAT(first_name, " ", last_name) as poster FROM messages JOIN users ON user_id = users.id WHERE recipient_id = :id ORDER BY m_created_at DESC;'
+		m_data = { 'id': id }
+		messages = self.db.query_db(m_query, m_data)
+		for message in messages:
+			c_query = 'SELECT comment, comments.created_at as c_created_at, CONCAT(first_name, " ", last_name) as commenter FROM comments JOIN users ON user_id = users.id WHERE message_id = :id ORDER BY c_created_at ASC;'
+			c_data = { 'id': message['id'] }
+			message['comments'] = self.db.query_db(c_query, c_data)
+		return messages
 
 
 

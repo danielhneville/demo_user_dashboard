@@ -7,12 +7,18 @@ class Admins(Controller):
 		self.db = self._app.db
 
 	def admin(self):
+		if 'user' not in session:
+			return redirect('/')
 		return self.load_view('/admin/admin.html')
 
 	def new(self):
+		if 'user' not in session:
+			return redirect('/')
 		return self.load_view('/admin/new.html')
 
 	def edit(self, id):
+		if 'user' not in session:
+			return redirect('/')
 		return self.load_view('/admin/edit.html')
 
 	def destroy(self, id):

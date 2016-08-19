@@ -6,7 +6,14 @@ class User(Model):
 
 	def all_users(self):
 		query = 'SELECT * FROM users;'
-		return self.db.query_db(query)
+		users = self.db.query_db(query)
+		for user in users:
+			if user['user_level'] == 9:
+				user['user_level'] = 'admin'
+			else:
+				user['user_level'] = 'normal'
+			user['created_at'] = user['created_at'].strftime('%b %d, %Y')
+		return users
 
 	def one_user(self, id):
 		if not id:
@@ -14,6 +21,7 @@ class User(Model):
 		query = 'SELECT * FROM users WHERE id = :id LIMIT 1'
 		data = { 'id': id }
 		user = self.db.query_db(query, data)
+		user[0]['created_at'] = user[0]['created_at'].strftime('%b %d, %Y')
 		return user[0]
 
 	def destroy_user(self, id):
