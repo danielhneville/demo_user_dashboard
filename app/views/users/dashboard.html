@@ -53,13 +53,15 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>1</td>
-							<td><a href="/users/show/1">Sir Perceval</a></td>
-							<td>perceval@sir.fur</td>
-							<td>Oct 19, 2014</td>
-							<td>admin</td>
-						</tr>
+						{% for user in users %}
+							<tr>
+								<td>{{ user['id'] }}</td>
+								<td><a href="/users/show/{{ user['id'] }}">{{ user['first_name'] }} {{ user['last_name'] }}</a></td>
+								<td>{{ user['email'] }}</td>
+								<td>{{ user['created_at'] }}</td>
+								<td>{{ user['user_level'] }}</td>
+							</tr>
+						{% endfor %}
 					</tbody>
 				</table>
 			</div>

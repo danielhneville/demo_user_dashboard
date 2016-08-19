@@ -1,21 +1,15 @@
 $(document).ready(function(){
 
-	$('#remove').click(function(){
+	$('.remove').on('click', function(){
+		url = $(this).attr('url');
 		alertify.confirm('Are you sure you want to delete this user?', function(e){
 			if (e) {
-				var user_id = $('#delete').val();
-				var route = '/admin/destroy/' + user_id;
-				$.get(route, function(res){
-					// $('#all_users').html(function(){
-
-					// })
-				})
+				window.location.href = url;
 			} else {
 				return false;
 			}
 		});
 
 	});
-
 
 })
