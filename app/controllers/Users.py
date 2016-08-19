@@ -1,5 +1,4 @@
 from system.core.controller import *
-import datetime
 
 class Users(Controller):
 	def __init__(self, action):
@@ -38,8 +37,14 @@ class Users(Controller):
 		return redirect('/')
 
 	def login(self):
-		#if user is admin, return them to the admin dashboard instead.
-		return redirect('/dashboard')
+		user = self.models['User'].user_login(request.form)
+		if user:
+			session['user'] = user
+			if user['user_level'] == 9:
+				return redirect('/dashboard/admin')
+			else: 
+				return redirect('/dashboard')
+		return redirect('/signin')
 
 	def create(self):
 		user = self.models['User'].insert_user(request.form)

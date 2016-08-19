@@ -54,12 +54,16 @@ class User(Model):
 	def user_login(self, info):
 		if not 'email' in info or not 'password' in info:
 			return False
-		info['email'] = info['email'].lower()
+		# TODO: add validation
+		data = {
+			'email': info['email'].lower(),
+			'password': info['password']
+		}
 		query = 'SELECT * FROM users WHERE email = :email'
-		users = self.db.query_db(query, info)
+		users = self.db.query_db(query, data)
 		user = users[0]
 		if user:
-			if self.bcrypt.check_password_hash(user.pw_hash, info['password']):
+			if self.bcrypt.check_password_hash(user['password'], info['password']):
 				return user
 		return False
 
