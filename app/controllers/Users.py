@@ -22,7 +22,8 @@ class Users(Controller):
 	def edit(self):
 		if 'user' not in session:
 			return redirect('/')
-		return self.load_view('/users/edit.html')
+		user = self.models['User'].one_user(session['user']['id'])
+		return self.load_view('/users/edit.html', user=user)
 
 	def show(self, id):
 		if 'user' not in session:
@@ -52,5 +53,13 @@ class Users(Controller):
 				return redirect('/dashboard')
 
 	def update(self):
-		#grab session data and data from one of the three different forms (based on which was submitted - info, password, description) to update user information through the user model.
+		if request.form['action'] == 'Update Information':
+			self.models['User'].update_info(request.form)
+		elif request.form['action'] == 'Update Password':
+			if self.models['User'].update_pw(request.form) == 'error':
+				flash('Passwords don\'t match')
+		elif request.form['action'] == 'Update Description':
+			self.models['User'].update_desc(request.form)
+		else:
+			return redirect('/logoff')
 		return redirect('/users/edit')

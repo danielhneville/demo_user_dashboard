@@ -54,6 +54,7 @@ class User(Model):
 	def user_login(self, info):
 		if not 'email' in info or not 'password' in info:
 			return False
+		info['email'] = info['email'].lower()
 		query = 'SELECT * FROM users WHERE email = :email'
 		users = self.db.query_db(query, info)
 		user = users[0]
@@ -61,6 +62,30 @@ class User(Model):
 			if self.bcrypt.check_password_hash(user.pw_hash, info['password']):
 				return user
 		return False
+
+	def update_info(self, info):
+		if not 'email' in info or not 'fname' in info or not 'lname' in info or not 'id' in info:
+			return False
+		query = 'UPDATE users SET email=:email, first_name=:fname, last_name=:lname WHERE id=:id'
+		return self.db.query_db(query, info)
+
+	def update_pw(self, info):
+		if not 'password' in info or not 'pwconfirm' in info or not 'id' in info:
+			return False
+		if info['password'] != info['pwconfirm']:
+			return 'error'
+		query = 'UPDATE users SET password=:password WHERE id=:id'
+		data = {'password': self.bcrypt.generate_password_hash(info['password']), 'id': info['id']}
+		return self.db.query_db(query, data)
+
+	def update_desc(self, info):
+		print info
+		print '*'*20
+		if not 'description' in info or not 'id' in info:
+			return False
+		query = 'UPDATE users SET description=:description WHERE id=:id'
+		return self.db.query_db(query, info)
+
 
 
 	"""
