@@ -50,6 +50,9 @@ class Users(Controller):
 		user = self.models['User'].insert_user(request.form)
 		if not user:
 			return redirect('/')
+		if 'user' in session:
+			if session['user']['user_level'] == 9:
+				return redirect('/dashboard/admin')
 		else:
 			session['user'] = user
 			if user['user_level'] == 9:
@@ -58,6 +61,8 @@ class Users(Controller):
 				return redirect('/dashboard')
 
 	def update(self):
+		if 'user' not in session:
+			return redirect('/')
 		if request.form['action'] == 'Update Information':
 			self.models['User'].update_info(request.form)
 		elif request.form['action'] == 'Update Password':

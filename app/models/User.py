@@ -70,8 +70,12 @@ class User(Model):
 	def update_info(self, info):
 		if not 'email' in info or not 'fname' in info or not 'lname' in info or not 'id' in info:
 			return False
-		query = 'UPDATE users SET email=:email, first_name=:fname, last_name=:lname WHERE id=:id'
-		return self.db.query_db(query, info)
+		if not 'user_level' in info:
+			query = 'UPDATE users SET email=:email, first_name=:fname, last_name=:lname WHERE id=:id'
+			return self.db.query_db(query, info)
+		elif 'user_level' in info:
+			query = 'UPDATE users SET email=:email, first_name=:fname, last_name=:lname, user_level=:user_level WHERE id=:id'
+			return self.db.query_db(query, info)
 
 	def update_pw(self, info):
 		if not 'password' in info or not 'pwconfirm' in info or not 'id' in info:
