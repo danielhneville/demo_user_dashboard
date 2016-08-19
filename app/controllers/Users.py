@@ -13,19 +13,21 @@ class Users(Controller):
 		return self.load_view('/users/register.html')
 
 	def dashboard(self):
-		if 'user' not in session:
+		if not 'user' in session:
 			return redirect('/')
 		users = self.models['User'].all_users()
+		if session['user']['user_level'] == 9:
+			return self.load_view('/admin/admin.html', users=users)
 		return self.load_view('/users/dashboard.html', users=users)
 
 	def edit(self):
-		if 'user' not in session:
+		if not 'user' in session:
 			return redirect('/')
 		user = self.models['User'].one_user(session['user']['id'])
 		return self.load_view('/users/edit.html', user=user)
 
 	def show(self, id):
-		if 'user' not in session:
+		if not 'user' in session:
 			return redirect('/')
 		user = self.models['User'].one_user(id)
 		content = self.models['Message'].get_content_by_user_id(id)

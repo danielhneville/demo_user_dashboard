@@ -5,6 +5,8 @@ class Message(Model):
 		super(Message, self).__init__()
 
 	def get_content_by_user_id(self, id):
+		if not id > 0:
+			return False
 		m_query = 'SELECT messages.id, message, messages.created_at as m_created_at, CONCAT(first_name, " ", last_name) as poster FROM messages JOIN users ON user_id = users.id WHERE recipient_id = :id ORDER BY m_created_at DESC;'
 		m_data = { 'id': id }
 		messages = self.db.query_db(m_query, m_data)
@@ -12,9 +14,24 @@ class Message(Model):
 			c_query = 'SELECT comment, comments.created_at as c_created_at, CONCAT(first_name, " ", last_name) as commenter FROM comments JOIN users ON user_id = users.id WHERE message_id = :id ORDER BY c_created_at ASC;'
 			c_data = { 'id': message['id'] }
 			message['comments'] = self.db.query_db(c_query, c_data)
+			message['m_created_at'] = message['m_created_at'].strftime('%b %d, %Y %I:%M %p')
+			for comment in message['comments']:
+				comment['c_created_at'] = comment['c_created_at'].strftime('%b %d, %Y %I:%M %p')
 		return messages
 
+	def new_message(self, info):
+		if not id > 0:
+			return False
+		# TODO: Validation
+		query = 'INSERT INTO messages (message, user_id, recipient_id) VALUES (:message, :user_id, :recipient_id)'
+		return self.db.query_db(query, info)
 
+	def new_comment(self, info):
+		if not id > 0:
+			return False
+		# TODO: Validation
+		query = 'INSERT INTO comments (comment, user_id, message_id) VALUES (:comment, :user_id, :message_id)'
+		return self.db.query_db(query, info)
 
 	"""
 	Below is an example of a model method that queries the database for all users in a fictitious application
